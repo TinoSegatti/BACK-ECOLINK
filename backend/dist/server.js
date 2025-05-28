@@ -11,17 +11,16 @@ const cors_1 = __importDefault(require("cors"));
 const dotenv_1 = __importDefault(require("dotenv"));
 // Cargar variables de entorno desde .env
 dotenv_1.default.config();
-// Crear una instancia de Express
+// Crear instancia de Express
 const app = (0, express_1.default)();
-// Crear una instancia de Prisma
+// Crear instancia de Prisma
 const prisma = new client_1.PrismaClient();
-// Middleware para parsear el cuerpo de las solicitudes a JSON
+// Middleware
 app.use(express_1.default.json());
-// Middleware para permitir solicitudes CORS desde el frontend
 app.use((0, cors_1.default)({ origin: process.env.FRONTEND_URL || 'https://your-frontend.vercel.app' }));
-// Conectar las rutas bajo el prefijo /api
-app.use('/api', clienteRoutes_1.default);
-app.use('/api', categoriaRoutes_1.default);
+// Rutas
+app.use('/api/v1', clienteRoutes_1.default);
+app.use('/api/v1', categoriaRoutes_1.default);
 // Ruta de prueba
 app.get('/', (req, res) => {
     res.send('¡Bienvenido a la API de gestión de clientes!');
@@ -36,7 +35,7 @@ const PORT = parseInt(process.env.PORT || '3000', 10);
 const server = app.listen(PORT, '0.0.0.0', () => {
     console.log(`Servidor escuchando en http://0.0.0.0:${PORT}`);
 });
-// Liberar recursos de Prisma al cerrar el servidor
+// Liberar recursos de Prisma al cerrar
 process.on('SIGTERM', async () => {
     await prisma.$disconnect();
     server.close();
