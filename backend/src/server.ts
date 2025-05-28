@@ -1,42 +1,46 @@
-import express from 'express';
-import clienteRoutes from './routes/clienteRoutes'; // Importa las rutas de clientes
-import categoriaRoutes from './routes/categoriaRoutes'; // Importa las rutas de categorías
-import { PrismaClient } from '@prisma/client'; // Importa Prisma para la conexión a la base de datos
-import cors from 'cors'; // Middleware para permitir solicitudes CORS
+import express, { Request, Response, NextFunction } from 'express';
+import clienteRoutes from './routes/clienteRoutes';
+import categoriaRoutes from './routes/categoriaRoutes';
+import { PrismaClient } from '@prisma/client';
+import cors from 'cors';
 import dotenv from 'dotenv';
 
 // Cargar variables de entorno desde .env
 dotenv.config();
 
-// Crear una instancia de Express
+// Crear instancia de Express
 const app = express();
 
-// Crear una instancia de Prisma
+// Crear instancia de Prisma
 const prisma = new PrismaClient();
 
-// Middleware para parsear el cuerpo de las solicitudes a JSON
+// Middleware
 app.use(express.json());
+app.use(cors({ origin: process.env.FRONTEND_URL || 'https://your-frontend.vercel.app' }));
 
-// Middleware para permitir solicitudes CORS
-app.use(cors());
+// Rutas
+app.use('/api/v1', clienteRoutes);
+app.use('/api/v1', categoriaRoutes);
 
-// Conectar las rutas bajo el prefijo /api
-app.use('/api', clienteRoutes);
-app.use('/api', categoriaRoutes); // Añade las rutas de categorías
-
-// Ruta de prueba para verificar que el servidor está funcionando
-app.get('/', (req, res) => {
+// Ruta de prueba
+app.get('/', (req: Request, res: Response) => {
     res.send('¡Bienvenido a la API de gestión de clientes!');
 });
 
 // Manejo de errores global
-app.use((err: Error, req: express.Request, res: express.Response, next: express.NextFunction) => {
+app.use((err: Error, req: Request, res: Response, next: NextFunction): void => {
     console.error('Error:', err.stack);
     res.status(500).json({ error: 'Ocurrió un error en el servidor' });
 });
 
 // Iniciar el servidor
-const PORT = process.env.PORT || 3000; // Puerto del servidor
-app.listen(PORT, () => {
-    console.log(`Servidor escuchando en http://localhost:${PORT}`);
+const PORT: number = parseInt(process.env.PORT || '3000', 10);
+const server = app.listen(PORT, '0.0.0.0', () => {
+    console.log(`Servidor escuchando en http://0.0.0.0:${PORT}`);
+});
+
+// Liberar recursos de Prisma al cerrar
+process.on('SIGTERM', async () => {
+    await prisma.$disconnect();
+    server.close();
 });
