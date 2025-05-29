@@ -16,7 +16,7 @@ const prisma = new PrismaClient();
 
 // Middleware
 app.use(express.json());
-app.use(cors({ origin: process.env.FRONTEND_URL || 'https://your-frontend.vercel.app' }));
+app.use(cors({ origin: process.env.FRONTEND_URL || 'front-ecolink-yvrknqku7-tinosegattis-projects.vercel.app' }));
 
 // Rutas
 app.use('/api/v1', clienteRoutes);
