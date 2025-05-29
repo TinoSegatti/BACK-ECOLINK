@@ -18,7 +18,7 @@ const prisma = new PrismaClient();
 app.use(express.json());
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL || 'https://front-ecolink-yvrknqku7-tinosegattis-projects.vercel.app',
+    process.env.FRONTEND_URL || 'https://front-ecolink.vercel.app',
     'http://localhost:3000', // Para desarrollo local
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
