@@ -8,8 +8,10 @@ import dotenv from 'dotenv';
 // Cargar variables de entorno desde .env
 dotenv.config();
 
-// Crear instancia de Express
 const app = express();
+
+// Middleware para parsear JSON
+app.use(express.json()); // <--- Agrega esta línea
 
 // Crear instancia de Prisma
 const prisma = new PrismaClient();
