@@ -39,7 +39,7 @@ export const createClienteSchema = z.object({
     .string()
     .nullable()
     .refine(
-      (value) => !value || /^\d{2}-?\d{8}-?\d{1}$/.test(value.replace(/-/g, '')),
+      (value) => !value || /^\d{2}-\d{8}-\d{1}$/.test(value),
       { message: 'El CUIT debe tener el formato 12-12345678-1' }
     ),
   condicion: z.string().nullable(),
@@ -92,7 +92,7 @@ export const updateClienteSchema = z.object({
     .string()
     .nullable()
     .refine(
-      (value) => !value || /^\d{2}-?\d{8}-?\d{1}$/.test(value.replace(/-/g, '')),
+      (value) => !value || /^\d{2}-\d{8}-\d{1}$/.test(value),
       { message: 'El CUIT debe tener el formato 12-12345678-1' }
     )
     .optional(),
