@@ -29,7 +29,7 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         precio: data.precio,
         ultimaRecoleccion: data.ultimaRecoleccion,
         contratacion: data.contratacion,
-        nuevo: true, // Siempre true por defecto
+        //nuevo: true, // Siempre true por defecto
         estadoTurno: data.estadoTurno,
         prioridad: data.prioridad,
         estado: data.estado,
