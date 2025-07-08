@@ -1,18 +1,25 @@
-import express from 'express';
+import express from "express"
 import {
   crearClienteHandler,
   obtenerClientesHandler,
   obtenerClientePorIdHandler,
   actualizarClienteHandler,
   eliminarClienteHandler,
-} from '../controllers/clienteController';
+} from "../controllers/clienteController"
+import { authenticateToken, requireOperadorOrAdmin, requireAnyRole } from "../middleware/authMiddleware"
 
-const router = express.Router();
+const router = express.Router()
 
-router.post('/clientes', crearClienteHandler);
-router.get('/clientes', obtenerClientesHandler);
-router.get('/clientes/:id', obtenerClientePorIdHandler);
-router.put('/clientes/:id', actualizarClienteHandler);
-router.delete('/clientes/:id', eliminarClienteHandler);
+// Todas las rutas requieren autenticación
+router.use(authenticateToken)
 
-export default router;
+// Rutas que requieren permisos de OPERADOR o ADMIN (crear/editar)
+router.post("/clientes", requireOperadorOrAdmin, crearClienteHandler)
+router.put("/clientes/:id", requireOperadorOrAdmin, actualizarClienteHandler)
+router.delete("/clientes/:id", requireOperadorOrAdmin, eliminarClienteHandler)
+
+// Rutas que permiten cualquier rol autenticado (leer)
+router.get("/clientes", requireAnyRole, obtenerClientesHandler)
+router.get("/clientes/:id", requireAnyRole, obtenerClientePorIdHandler)
+
+export default router

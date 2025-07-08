@@ -24,6 +24,7 @@ model Cliente {
   precio          Float?
   ultimaRecoleccion String?
   contratacion    String?
+  nuevo           Boolean   @default(true)
   estadoTurno     String?
   prioridad       String?
   estado          String?
@@ -49,21 +50,19 @@ model Categoria {
   @@map("categoria")
 }
 
-// TABLAS PARA AUTENTICACIÓN CON VERIFICACIÓN DE EMAIL
+// NUEVAS TABLAS PARA AUTENTICACIÓN
 model Usuario {
-  id                Int       @id @default(autoincrement())
-  email             String    @unique
-  password          String
-  nombre            String
-  rol               RolUsuario
-  activo            Boolean   @default(true)
-  verificado        Boolean   @default(false)
-  tokenVerificacion String?   @unique // Token para verificar email
-  tokenExpiracion   DateTime? // Expiración del token de verificación
-  resetToken        String?   @unique // NUEVO CAMPO para restablecimiento de contraseña
-  resetTokenExpiry  DateTime? // NUEVO CAMPO para expiración del token de restablecimiento
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  password    String
+  nombre      String
+  rol         RolUsuario
+  activo      Boolean  @default(true)
+  verificado  Boolean  @default(false)
+  tokenVerificacion String? @unique // Token para verificar email
+  tokenExpiracion   DateTime? // Expiración del token
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   
   // Relación con solicitudes de registro
   solicitudesCreadas SolicitudRegistro[] @relation("AdminCreador")
@@ -72,20 +71,20 @@ model Usuario {
 }
 
 model SolicitudRegistro {
-  id                Int       @id @default(autoincrement())
-  email             String    @unique
-  nombre            String
-  rol               RolUsuario
-  tokenVerificacion String    @unique
-  aprobada          Boolean   @default(false)
-  rechazada         Boolean   @default(false)
-  motivoRechazo     String?
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @updatedAt
+  id          Int      @id @default(autoincrement())
+  email       String   @unique
+  nombre      String
+  rol         RolUsuario
+  tokenVerificacion String @unique
+  aprobada    Boolean  @default(false)
+  rechazada   Boolean  @default(false)
+  motivoRechazo String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
   
   // Relación con el admin que aprueba/rechaza
-  adminId           Int?
-  admin             Usuario?  @relation("AdminCreador", fields: [adminId], references: [id])
+  adminId     Int?
+  admin       Usuario? @relation("AdminCreador", fields: [adminId], references: [id])
   
   @@map("solicitud_registro")
 }

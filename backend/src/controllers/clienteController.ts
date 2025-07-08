@@ -11,14 +11,11 @@ import { ZodError } from 'zod';
 
 export const crearClienteHandler = async (req: Request, res: Response): Promise<void> => {
   try {
-    console.log('Cuerpo de la solicitud recibido:', req.body); // Log del cuerpo
     const validatedData = createClienteSchema.parse(req.body);
-    console.log('Datos validados:', validatedData); // Log después de validación
     const nuevoCliente = await crearCliente(validatedData);
     res.status(201).json(nuevoCliente);
   } catch (error: any) {
     if (error instanceof ZodError) {
-      console.log('Errores de validación de Zod:', error.errors); // Log de errores de Zod
       const errors = error.errors.map(e => ({
         field: e.path.join('.'),
         message: e.message,
