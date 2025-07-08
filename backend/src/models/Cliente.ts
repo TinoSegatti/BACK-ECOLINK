@@ -15,7 +15,6 @@ export type Cliente = {
     precio: number | null;
     ultimaRecoleccion: string | null;
     contratacion: string | null;
-    nuevo: boolean;
     estadoTurno: string | null;
     prioridad: string | null;
     estado: string | null;

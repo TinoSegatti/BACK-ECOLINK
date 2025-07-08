@@ -30,7 +30,6 @@ export const createClienteSchema = z.object({
         !isNaN(Date.parse(value.split('/').reverse().join('-'))),
       { message: 'La contratación debe tener el formato dd/MM/aaaa y ser una fecha válida' }
     ),
-  nuevo: z.boolean().optional().default(true),
   estadoTurno: z.string().nullable(),
   prioridad: z.string().nullable(),
   estado: z.string().nullable(),
@@ -83,7 +82,6 @@ export const updateClienteSchema = z.object({
       { message: 'La contratación debe tener el formato dd/MM/aaaa y ser una fecha válida' }
     )
     .optional(),
-  nuevo: z.boolean().optional(),
   estadoTurno: z.string().nullable().optional(),
   prioridad: z.string().nullable().optional(),
   estado: z.string().nullable().optional(),
