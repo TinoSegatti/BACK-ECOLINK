@@ -97,11 +97,11 @@ app.use(cors({
 
 
 // Iniciar el servidor
-// const PORT = process.env.PORT || 3000
-// app.listen(PORT, () => {
-//   console.log(`🌟 Servidor escuchando en http://localhost:${PORT}`)
-//   console.log(`📋 Rutas disponibles:`)
-//   console.log(`   GET  http://localhost:${PORT}/`)
-//   console.log(`   GET  http://localhost:${PORT}/api/routes`)
-//   console.log(`   GET  http://localhost:${PORT}/api/auth/test`)
-// })
+const PORT = process.env.PORT || 3000
+app.listen(PORT, () => {
+  console.log(`🌟 Servidor escuchando en http://localhost:${PORT}`)
+  console.log(`📋 Rutas disponibles:`)
+  console.log(`   GET  http://localhost:${PORT}/`)
+  console.log(`   GET  http://localhost:${PORT}/api/routes`)
+  console.log(`   GET  http://localhost:${PORT}/api/auth/test`)
+})
