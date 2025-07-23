@@ -31,7 +31,7 @@ app.use((req, res, next) => {
 console.log("🚀 Configurando rutas...")
 app.use("/api", authRoutes) // Rutas de autenticación
 app.use("/api", clienteRoutes)
-app.use("/api", categoriaRoutes)
+app.use("/api/v1", categoriaRoutes)
 
 // Ruta de prueba para verificar que el servidor está funcionando
 app.get("/", (req, res) => {
