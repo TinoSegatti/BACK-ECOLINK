@@ -63,6 +63,10 @@ const actualizarCategoriaHandler = async (req, res, next) => {
         res.json(categoriaActualizada);
     }
     catch (error) {
+        if (error.message === 'Ya existe una categoría con ese valor para este campo') {
+            res.status(409).json({ errors: [{ field: 'general', message: error.message }] });
+            return;
+        }
         next(error);
     }
 };
@@ -86,18 +90,40 @@ const eliminarCategoriaHandler = async (req, res, next) => {
         res.status(204).send();
     }
     catch (error) {
-        if (error.message.includes('está en uso')) {
-            res.status(409).json({
-                errors: [{ field: 'general', message: error.message }],
-            });
-            return;
+        let parsedError;
+        try {
+            parsedError = JSON.parse(error.message);
+            if (Array.isArray(parsedError)) {
+                const msg = parsedError[0]?.message || '';
+                console.log('[categoriaController] Error parseado:', parsedError);
+                console.log('[categoriaController] Mensaje detectado:', msg);
+                if (msg.toLowerCase().includes('en uso')) {
+                    console.log('[categoriaController] Respondiendo 409 por "en uso"');
+                    res.status(409).json({ errors: parsedError });
+                    return;
+                }
+                if (msg.includes('no es gestionable')) {
+                    console.log('[categoriaController] Respondiendo 400 por "no es gestionable"');
+                    res.status(400).json({ errors: parsedError });
+                    return;
+                }
+                if (msg.includes('no existe')) {
+                    console.log('[categoriaController] Respondiendo 404 por "no existe"');
+                    res.status(404).json({ errors: parsedError });
+                    return;
+                }
+                // Otros errores personalizados
+                console.log('[categoriaController] Respondiendo 409 por error personalizado');
+                res.status(409).json({ errors: parsedError });
+                return;
+            }
         }
-        if (error.message === 'Campo no gestionable') {
-            res.status(400).json({
-                errors: [{ field: 'campo', message: 'El campo especificado no es gestionable' }],
-            });
-            return;
+        catch (e) {
+            console.log('[categoriaController] Error al intentar parsear error.message:', error.message, e);
+            // No es JSON, sigue con el flujo normal
         }
+        // Error genérico
+        console.log('[categoriaController] Respondiendo 500 por error genérico');
         res.status(500).json({
             errors: [{ field: 'general', message: 'Error al eliminar la categoría' }],
         });

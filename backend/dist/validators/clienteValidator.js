@@ -28,7 +28,6 @@ exports.createClienteSchema = zod_1.z.object({
         .refine((value) => value === null ||
         /^\d{2}\/\d{2}\/\d{4}$/.test(value) &&
             !isNaN(Date.parse(value.split('/').reverse().join('-'))), { message: 'La contratación debe tener el formato dd/MM/aaaa y ser una fecha válida' }),
-    nuevo: zod_1.z.boolean().optional().default(true),
     estadoTurno: zod_1.z.string().nullable(),
     prioridad: zod_1.z.string().nullable(),
     estado: zod_1.z.string().nullable(),
@@ -36,7 +35,7 @@ exports.createClienteSchema = zod_1.z.object({
     CUIT: zod_1.z
         .string()
         .nullable()
-        .refine((value) => !value || /^\d{2}-?\d{8}-?\d{1}$/.test(value.replace(/-/g, '')), { message: 'El CUIT debe tener el formato 12-12345678-1' }),
+        .refine((value) => !value || /^\d{2}-\d{8}-\d{1}$/.test(value), { message: 'El CUIT debe tener el formato 12-12345678-1' }),
     condicion: zod_1.z.string().nullable(),
     factura: zod_1.z.string().nullable(),
     pago: zod_1.z.string().nullable(),
@@ -44,6 +43,8 @@ exports.createClienteSchema = zod_1.z.object({
     nombreEmpresa: zod_1.z.string().nullable(),
     emailAdministracion: zod_1.z.string().email('El email de administración no es válido').nullable(),
     emailComercial: zod_1.z.string().email('El email comercial no es válido').nullable(),
+    rubro: zod_1.z.string().nullable(),
+    categoria: zod_1.z.string().nullable(),
 });
 exports.updateClienteSchema = zod_1.z.object({
     zona: zod_1.z.string().min(1, 'La zona es obligatoria').optional(),
@@ -73,7 +74,6 @@ exports.updateClienteSchema = zod_1.z.object({
         /^\d{2}\/\d{2}\/\d{4}$/.test(value) &&
             !isNaN(Date.parse(value.split('/').reverse().join('-'))), { message: 'La contratación debe tener el formato dd/MM/aaaa y ser una fecha válida' })
         .optional(),
-    nuevo: zod_1.z.boolean().optional(),
     estadoTurno: zod_1.z.string().nullable().optional(),
     prioridad: zod_1.z.string().nullable().optional(),
     estado: zod_1.z.string().nullable().optional(),
@@ -81,7 +81,7 @@ exports.updateClienteSchema = zod_1.z.object({
     CUIT: zod_1.z
         .string()
         .nullable()
-        .refine((value) => !value || /^\d{2}-?\d{8}-?\d{1}$/.test(value.replace(/-/g, '')), { message: 'El CUIT debe tener el formato 12-12345678-1' })
+        .refine((value) => !value || /^\d{2}-\d{8}-\d{1}$/.test(value), { message: 'El CUIT debe tener el formato 12-12345678-1' })
         .optional(),
     condicion: zod_1.z.string().nullable().optional(),
     factura: zod_1.z.string().nullable().optional(),
@@ -90,4 +90,6 @@ exports.updateClienteSchema = zod_1.z.object({
     nombreEmpresa: zod_1.z.string().nullable().optional(),
     emailAdministracion: zod_1.z.string().email('El email de administración no es válido').nullable().optional(),
     emailComercial: zod_1.z.string().email('El email comercial no es válido').nullable().optional(),
+    rubro: zod_1.z.string().nullable().optional(),
+    categoria: zod_1.z.string().nullable().optional(),
 });

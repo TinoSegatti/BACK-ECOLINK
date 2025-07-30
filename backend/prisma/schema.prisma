@@ -36,6 +36,8 @@ model Cliente {
   nombreEmpresa   String?   // Campo para empresas (razón social)
   emailAdministracion String? // Campo para empresas
   emailComercial  String?   // Campo para empresas
+  rubro           String?   // Campo para empresas (rubro de la empresa)
+  categoria       String?   // Campo para empresas (categoría de la empresa)
   @@map("cliente")
 }
 

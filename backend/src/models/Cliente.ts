@@ -27,4 +27,6 @@ export type Cliente = {
     nombreEmpresa: string | null;     // Nuevo campo
     emailAdministracion: string | null; // Nuevo campo
     emailComercial: string | null;    // Nuevo campo
+    rubro: string | null;             // Nuevo campo para empresas (rubro de la empresa)
+    categoria: string | null;         // Nuevo campo para empresas (categoría de la empresa)
 };

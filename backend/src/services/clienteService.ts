@@ -42,6 +42,8 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         nombreEmpresa: data.nombreEmpresa,
         emailAdministracion: data.emailAdministracion,
         emailComercial: data.emailComercial,
+        rubro: data.rubro,
+        categoria: data.categoria,
       },
     });
   } catch (error: any) {
@@ -96,6 +98,8 @@ export const actualizarCliente = async (id: number, data: Partial<Omit<Cliente, 
         nombreEmpresa: data.nombreEmpresa,
         emailAdministracion: data.emailAdministracion,
         emailComercial: data.emailComercial,
+        rubro: data.rubro,
+        categoria: data.categoria,
       },
     });
   } catch (error: any) {

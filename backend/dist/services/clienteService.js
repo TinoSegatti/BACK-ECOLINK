@@ -29,7 +29,7 @@ const crearCliente = async (data) => {
                 precio: data.precio,
                 ultimaRecoleccion: data.ultimaRecoleccion,
                 contratacion: data.contratacion,
-                nuevo: true, // Siempre true por defecto
+                //nuevo: true, // Siempre true por defecto
                 estadoTurno: data.estadoTurno,
                 prioridad: data.prioridad,
                 estado: data.estado,
@@ -42,6 +42,8 @@ const crearCliente = async (data) => {
                 nombreEmpresa: data.nombreEmpresa,
                 emailAdministracion: data.emailAdministracion,
                 emailComercial: data.emailComercial,
+                rubro: data.rubro,
+                categoria: data.categoria,
             },
         });
     }
@@ -83,7 +85,6 @@ const actualizarCliente = async (id, data) => {
                 precio: data.precio,
                 ultimaRecoleccion: data.ultimaRecoleccion,
                 contratacion: data.contratacion,
-                nuevo: data.nuevo,
                 estadoTurno: data.estadoTurno,
                 prioridad: data.prioridad,
                 estado: data.estado,
@@ -96,6 +97,8 @@ const actualizarCliente = async (id, data) => {
                 nombreEmpresa: data.nombreEmpresa,
                 emailAdministracion: data.emailAdministracion,
                 emailComercial: data.emailComercial,
+                rubro: data.rubro,
+                categoria: data.categoria,
             },
         });
     }
