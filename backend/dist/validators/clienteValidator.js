@@ -45,6 +45,7 @@ exports.createClienteSchema = zod_1.z.object({
     emailComercial: zod_1.z.string().email('El email comercial no es válido').nullable(),
     rubro: zod_1.z.string().nullable(),
     categoria: zod_1.z.string().nullable(),
+    horario: zod_1.z.string().nullable(),
 });
 exports.updateClienteSchema = zod_1.z.object({
     zona: zod_1.z.string().min(1, 'La zona es obligatoria').optional(),
@@ -92,4 +93,5 @@ exports.updateClienteSchema = zod_1.z.object({
     emailComercial: zod_1.z.string().email('El email comercial no es válido').nullable().optional(),
     rubro: zod_1.z.string().nullable().optional(),
     categoria: zod_1.z.string().nullable().optional(),
+    horario: zod_1.z.string().nullable().optional(),
 });

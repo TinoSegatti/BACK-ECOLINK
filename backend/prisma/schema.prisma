@@ -17,6 +17,7 @@ model Cliente {
   telefono        String  @unique
   tipoCliente     String
   detalleDireccion String?
+  horario         String?   // Campo para horario de atención
   semana          String?
   observaciones   String?
   debe            Float?
@@ -38,6 +39,7 @@ model Cliente {
   emailComercial  String?   // Campo para empresas
   rubro           String?   // Campo para empresas (rubro de la empresa)
   categoria       String?   // Campo para empresas (categoría de la empresa)
+  
   @@map("cliente")
 }
 

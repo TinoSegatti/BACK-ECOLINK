@@ -50,6 +50,7 @@ export const createClienteSchema = z.object({
   emailComercial: z.string().email('El email comercial no es válido').nullable(),
   rubro: z.string().nullable(),
   categoria: z.string().nullable(),
+  horario: z.string().nullable(),
 });
 
 export const updateClienteSchema = z.object({
@@ -105,6 +106,7 @@ export const updateClienteSchema = z.object({
   emailComercial: z.string().email('El email comercial no es válido').nullable().optional(),
   rubro: z.string().nullable().optional(),
   categoria: z.string().nullable().optional(),
+  horario: z.string().nullable().optional(),
 });
 
 export type CreateClienteInput = z.infer<typeof createClienteSchema>;

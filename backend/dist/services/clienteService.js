@@ -3,6 +3,37 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.eliminarCliente = exports.obtenerClientePorId = exports.obtenerClientes = exports.actualizarCliente = exports.crearCliente = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
+// Función auxiliar para obtener o crear la categoría "NUEVO" para prioridad
+const obtenerOCrearPrioridadNuevo = async () => {
+    try {
+        // Buscar si ya existe la categoría "NUEVO" para prioridad
+        const categoriaExistente = await prisma.categoria.findFirst({
+            where: {
+                campo: 'prioridad',
+                valor: 'NUEVO',
+                deleteAt: null,
+            },
+        });
+        if (categoriaExistente) {
+            return 'NUEVO';
+        }
+        // Si no existe, crear la categoría "NUEVO"
+        await prisma.categoria.create({
+            data: {
+                campo: 'prioridad',
+                valor: 'NUEVO',
+                color: null,
+                deleteAt: null,
+            },
+        });
+        return 'NUEVO';
+    }
+    catch (error) {
+        console.error('Error al obtener o crear categoría NUEVO para prioridad:', error);
+        // Si hay error, retornar "NUEVO" de todas formas para que el cliente se cree
+        return 'NUEVO';
+    }
+};
 const crearCliente = async (data) => {
     try {
         // Verificar si el teléfono ya existe
@@ -12,6 +43,8 @@ const crearCliente = async (data) => {
         if (clienteExistente) {
             throw new Error('El número de teléfono ya está registrado');
         }
+        // Obtener o crear la categoría "NUEVO" para prioridad
+        const prioridadPorDefecto = await obtenerOCrearPrioridadNuevo();
         return await prisma.cliente.create({
             data: {
                 zona: data.zona,
@@ -31,7 +64,7 @@ const crearCliente = async (data) => {
                 contratacion: data.contratacion,
                 //nuevo: true, // Siempre true por defecto
                 estadoTurno: data.estadoTurno,
-                prioridad: data.prioridad,
+                prioridad: data.prioridad ?? prioridadPorDefecto, // Usar el valor proporcionado o "NUEVO" por defecto
                 estado: data.estado,
                 gestionComercial: data.gestionComercial,
                 CUIT: data.CUIT,
@@ -44,6 +77,7 @@ const crearCliente = async (data) => {
                 emailComercial: data.emailComercial,
                 rubro: data.rubro,
                 categoria: data.categoria,
+                horario: data.horario,
             },
         });
     }
@@ -99,6 +133,7 @@ const actualizarCliente = async (id, data) => {
                 emailComercial: data.emailComercial,
                 rubro: data.rubro,
                 categoria: data.categoria,
+                horario: data.horario,
             },
         });
     }

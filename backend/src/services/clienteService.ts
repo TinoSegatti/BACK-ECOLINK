@@ -60,6 +60,7 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         tipoCliente: data.tipoCliente,
         detalleDireccion: data.detalleDireccion,
         semana: data.semana,
+        horario: data.horario,
         observaciones: data.observaciones,
         debe: data.debe,
         fechaDeuda: data.fechaDeuda,
@@ -81,6 +82,7 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         emailComercial: data.emailComercial,
         rubro: data.rubro,
         categoria: data.categoria,
+        
       },
     });
   } catch (error: any) {
@@ -117,6 +119,7 @@ export const actualizarCliente = async (id: number, data: Partial<Omit<Cliente, 
         tipoCliente: data.tipoCliente,
         detalleDireccion: data.detalleDireccion,
         semana: data.semana,
+        horario: data.horario,
         observaciones: data.observaciones,
         debe: data.debe,
         fechaDeuda: data.fechaDeuda,
@@ -137,6 +140,7 @@ export const actualizarCliente = async (id: number, data: Partial<Omit<Cliente, 
         emailComercial: data.emailComercial,
         rubro: data.rubro,
         categoria: data.categoria,
+        
       },
     });
   } catch (error: any) {

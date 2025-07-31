@@ -7,9 +7,7 @@ const zod_1 = require("zod");
 const crearClienteHandler = async (req, res) => {
     try {
         const validatedData = clienteValidator_1.createClienteSchema.parse(req.body);
-        // Aseguramos que el campo 'nuevo' esté presente, ya que es requerido por el tipo
-        const validatedDataConNuevo = { ...validatedData, nuevo: true };
-        const nuevoCliente = await (0, clienteService_1.crearCliente)(validatedDataConNuevo);
+        const nuevoCliente = await (0, clienteService_1.crearCliente)(validatedData);
         res.status(201).json(nuevoCliente);
     }
     catch (error) {

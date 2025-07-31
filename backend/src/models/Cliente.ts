@@ -8,6 +8,7 @@ export type Cliente = {
     detalleDireccion: string | null;
     telefono: string; // Debe comenzar con "+" y contener entre 2 y 15 dígitos
     semana: string | null;
+    horario: string | null;  
     observaciones: string | null;
     tipoCliente: string;
     debe: number | null;
@@ -29,4 +30,5 @@ export type Cliente = {
     emailComercial: string | null;    // Nuevo campo
     rubro: string | null;             // Nuevo campo para empresas (rubro de la empresa)
     categoria: string | null;         // Nuevo campo para empresas (categoría de la empresa)
+             // Campo para horario de atención
 };
