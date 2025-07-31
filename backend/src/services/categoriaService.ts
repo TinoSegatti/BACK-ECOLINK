@@ -86,6 +86,42 @@ export const actualizarCategoria = async (campo: string, oldValor: string, newVa
     }
 };
 
+export const obtenerTodasLasCategorias = async (): Promise<{ [campo: string]: { valor: string; color: string | null }[] }> => {
+    try {
+        const categorias = await prisma.categoria.findMany({
+            where: {
+                deleteAt: null, // Solo categorías no borradas
+            },
+            select: { campo: true, valor: true, color: true },
+            orderBy: [
+                { campo: 'asc' },
+                { valor: 'asc' }
+            ],
+        });
+
+        // Agrupar por campo
+        const categoriasAgrupadas: { [campo: string]: { valor: string; color: string | null }[] } = {};
+        
+        categorias.forEach(categoria => {
+            if (!categoriasAgrupadas[categoria.campo]) {
+                categoriasAgrupadas[categoria.campo] = [];
+            }
+            categoriasAgrupadas[categoria.campo].push({
+                valor: categoria.valor,
+                color: categoria.color
+            });
+        });
+
+        return categoriasAgrupadas;
+    } catch (error) {
+        console.error('Error al obtener todas las categorías:', error);
+        throw new Error(JSON.stringify([{
+            field: 'general',
+            message: 'No se pudo obtener las categorías',
+        }]));
+    }
+};
+
 function relanzarErrorSiEsJson(error: any) {
     if (typeof error.message === 'string') {
         try {

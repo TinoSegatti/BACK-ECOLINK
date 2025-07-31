@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { obtenerCategoriasPorCampo, crearCategoria, actualizarCategoria, eliminarCategoria } from '../services/categoriaService';
+import { obtenerCategoriasPorCampo, crearCategoria, actualizarCategoria, eliminarCategoria, obtenerTodasLasCategorias } from '../services/categoriaService';
 
 // Validador para colores hexadecimales
 const isValidHexColor = (color: string): boolean => {
@@ -123,5 +123,14 @@ export const eliminarCategoriaHandler = async (req: Request, res: Response, next
         res.status(500).json({
             errors: [{ field: 'general', message: 'Error al eliminar la categoría' }],
         });
+    }
+};
+
+export const getTodasLasCategoriasHandler = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+    try {
+        const categoriasAgrupadas = await obtenerTodasLasCategorias();
+        res.json({ categorias: categoriasAgrupadas });
+    } catch (error) {
+        next(error);
     }
 };

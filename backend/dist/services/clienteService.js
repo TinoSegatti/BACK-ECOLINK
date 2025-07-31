@@ -56,6 +56,7 @@ const crearCliente = async (data) => {
                 tipoCliente: data.tipoCliente,
                 detalleDireccion: data.detalleDireccion,
                 semana: data.semana,
+                horario: data.horario,
                 observaciones: data.observaciones,
                 debe: data.debe,
                 fechaDeuda: data.fechaDeuda,
@@ -77,7 +78,6 @@ const crearCliente = async (data) => {
                 emailComercial: data.emailComercial,
                 rubro: data.rubro,
                 categoria: data.categoria,
-                horario: data.horario,
             },
         });
     }
@@ -113,6 +113,7 @@ const actualizarCliente = async (id, data) => {
                 tipoCliente: data.tipoCliente,
                 detalleDireccion: data.detalleDireccion,
                 semana: data.semana,
+                horario: data.horario,
                 observaciones: data.observaciones,
                 debe: data.debe,
                 fechaDeuda: data.fechaDeuda,
@@ -133,7 +134,6 @@ const actualizarCliente = async (id, data) => {
                 emailComercial: data.emailComercial,
                 rubro: data.rubro,
                 categoria: data.categoria,
-                horario: data.horario,
             },
         });
     }

@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarCategoria = exports.actualizarCategoria = exports.crearCategoria = exports.obtenerCategoriasPorCampo = void 0;
+exports.eliminarCategoria = exports.obtenerTodasLasCategorias = exports.actualizarCategoria = exports.crearCategoria = exports.obtenerCategoriasPorCampo = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
 const obtenerCategoriasPorCampo = async (campo) => {
@@ -88,6 +88,40 @@ const actualizarCategoria = async (campo, oldValor, newValor, color) => {
     }
 };
 exports.actualizarCategoria = actualizarCategoria;
+const obtenerTodasLasCategorias = async () => {
+    try {
+        const categorias = await prisma.categoria.findMany({
+            where: {
+                deleteAt: null, // Solo categorías no borradas
+            },
+            select: { campo: true, valor: true, color: true },
+            orderBy: [
+                { campo: 'asc' },
+                { valor: 'asc' }
+            ],
+        });
+        // Agrupar por campo
+        const categoriasAgrupadas = {};
+        categorias.forEach(categoria => {
+            if (!categoriasAgrupadas[categoria.campo]) {
+                categoriasAgrupadas[categoria.campo] = [];
+            }
+            categoriasAgrupadas[categoria.campo].push({
+                valor: categoria.valor,
+                color: categoria.color
+            });
+        });
+        return categoriasAgrupadas;
+    }
+    catch (error) {
+        console.error('Error al obtener todas las categorías:', error);
+        throw new Error(JSON.stringify([{
+                field: 'general',
+                message: 'No se pudo obtener las categorías',
+            }]));
+    }
+};
+exports.obtenerTodasLasCategorias = obtenerTodasLasCategorias;
 function relanzarErrorSiEsJson(error) {
     if (typeof error.message === 'string') {
         try {

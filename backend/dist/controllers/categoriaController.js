@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.eliminarCategoriaHandler = exports.actualizarCategoriaHandler = exports.crearCategoriaHandler = exports.getCategoriasHandler = void 0;
+exports.getTodasLasCategoriasHandler = exports.eliminarCategoriaHandler = exports.actualizarCategoriaHandler = exports.crearCategoriaHandler = exports.getCategoriasHandler = void 0;
 const categoriaService_1 = require("../services/categoriaService");
 // Validador para colores hexadecimales
 const isValidHexColor = (color) => {
@@ -130,3 +130,13 @@ const eliminarCategoriaHandler = async (req, res, next) => {
     }
 };
 exports.eliminarCategoriaHandler = eliminarCategoriaHandler;
+const getTodasLasCategoriasHandler = async (req, res, next) => {
+    try {
+        const categoriasAgrupadas = await (0, categoriaService_1.obtenerTodasLasCategorias)();
+        res.json({ categorias: categoriasAgrupadas });
+    }
+    catch (error) {
+        next(error);
+    }
+};
+exports.getTodasLasCategoriasHandler = getTodasLasCategoriasHandler;

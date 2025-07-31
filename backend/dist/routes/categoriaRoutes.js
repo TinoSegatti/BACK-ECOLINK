@@ -11,6 +11,7 @@ const router = express_1.default.Router();
 router.use(authMiddleware_1.authenticateToken);
 // Rutas que permiten cualquier rol autenticado (leer)
 router.get("/categorias", authMiddleware_1.requireAnyRole, categoriaController_1.getCategoriasHandler);
+router.get("/categorias/todas", authMiddleware_1.requireAnyRole, categoriaController_1.getTodasLasCategoriasHandler);
 // Rutas que requieren permisos de ADMIN (crear/editar/eliminar categorías)
 router.post("/categorias", authMiddleware_1.requireAdmin, categoriaController_1.crearCategoriaHandler);
 router.put("/categorias", authMiddleware_1.requireAdmin, categoriaController_1.actualizarCategoriaHandler);
