@@ -2,6 +2,40 @@ import { PrismaClient, Cliente } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
+// Función auxiliar para obtener o crear la categoría "NUEVO" para prioridad
+const obtenerOCrearPrioridadNuevo = async (): Promise<string> => {
+  try {
+    // Buscar si ya existe la categoría "NUEVO" para prioridad
+    const categoriaExistente = await prisma.categoria.findFirst({
+      where: {
+        campo: 'prioridad',
+        valor: 'NUEVO',
+        deleteAt: null,
+      },
+    });
+
+    if (categoriaExistente) {
+      return 'NUEVO';
+    }
+
+    // Si no existe, crear la categoría "NUEVO"
+    await prisma.categoria.create({
+      data: {
+        campo: 'prioridad',
+        valor: 'NUEVO',
+        color: null,
+        deleteAt: null,
+      },
+    });
+
+    return 'NUEVO';
+  } catch (error) {
+    console.error('Error al obtener o crear categoría NUEVO para prioridad:', error);
+    // Si hay error, retornar "NUEVO" de todas formas para que el cliente se cree
+    return 'NUEVO';
+  }
+};
+
 export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> => {
   try {
     // Verificar si el teléfono ya existe
@@ -11,6 +45,9 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
     if (clienteExistente) {
       throw new Error('El número de teléfono ya está registrado');
     }
+
+    // Obtener o crear la categoría "NUEVO" para prioridad
+    const prioridadPorDefecto = await obtenerOCrearPrioridadNuevo();
 
     return await prisma.cliente.create({
       data: {
@@ -31,7 +68,7 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         contratacion: data.contratacion,
         //nuevo: true, // Siempre true por defecto
         estadoTurno: data.estadoTurno,
-        prioridad: data.prioridad,
+        prioridad: data.prioridad ?? prioridadPorDefecto, // Usar el valor proporcionado o "NUEVO" por defecto
         estado: data.estado,
         gestionComercial: data.gestionComercial,
         CUIT: data.CUIT,

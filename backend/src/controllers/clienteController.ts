@@ -12,9 +12,7 @@ import { ZodError } from 'zod';
 export const crearClienteHandler = async (req: Request, res: Response): Promise<void> => {
   try {
     const validatedData = createClienteSchema.parse(req.body);
-    // Aseguramos que el campo 'nuevo' esté presente, ya que es requerido por el tipo
-    const validatedDataConNuevo = { ...validatedData, nuevo: true };
-    const nuevoCliente = await crearCliente(validatedDataConNuevo);
+    const nuevoCliente = await crearCliente(validatedData);
     res.status(201).json(nuevoCliente);
   } catch (error: any) {
     if (error instanceof ZodError) {
