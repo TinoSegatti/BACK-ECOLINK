@@ -5,9 +5,10 @@ import {
   obtenerClientePorId,
   actualizarCliente,
   eliminarCliente,
+  actualizarPreciosPorTipoCliente,
 } from '../services/clienteService';
 import { createClienteSchema, updateClienteSchema } from '../validators/clienteValidator';
-import { ZodError } from 'zod';
+import { z, ZodError } from 'zod';
 
 export const crearClienteHandler = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -111,5 +112,32 @@ export const eliminarClienteHandler = async (req: Request, res: Response): Promi
   } catch (error: any) {
     console.error('Error al eliminar el cliente:', error);
     res.status(500).json({ error: 'Error al eliminar el cliente' });
+  }
+};
+
+export const actualizarPreciosHandler = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const ActualizarPreciosSchema = z.object({
+      tipoCliente: z.string().min(1, "El tipo de cliente es requerido"),
+      nuevoPrecio: z.number().min(0, "El nuevo precio debe ser un número positivo"),
+    });
+
+    const { tipoCliente, nuevoPrecio } = ActualizarPreciosSchema.parse(req.body);
+    const clientesActualizados = await actualizarPreciosPorTipoCliente(tipoCliente, nuevoPrecio);
+    res.status(200).json({
+      message: `Precios actualizados para ${clientesActualizados.count} clientes del tipo ${tipoCliente}`,
+      count: clientesActualizados.count,
+    });
+  } catch (error: any) {
+    if (error instanceof ZodError) {
+      const errors = error.errors.map(e => ({
+        field: e.path.join('.'),
+        message: e.message,
+      }));
+      res.status(400).json({ errors });
+      return;
+    }
+    console.error('Error al actualizar precios:', error);
+    res.status(500).json({ error: 'Error al actualizar precios' });
   }
 };
