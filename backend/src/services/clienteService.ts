@@ -31,7 +31,6 @@ const obtenerOCrearPrioridadNuevo = async (): Promise<string> => {
     return 'NUEVO';
   } catch (error) {
     console.error('Error al obtener o crear categoría NUEVO para prioridad:', error);
-    // Si hay error, retornar "NUEVO" de todas formas para que el cliente se cree
     return 'NUEVO';
   }
 };
@@ -67,9 +66,8 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         precio: data.precio,
         ultimaRecoleccion: data.ultimaRecoleccion,
         contratacion: data.contratacion,
-        //nuevo: true, // Siempre true por defecto
         estadoTurno: data.estadoTurno,
-        prioridad: data.prioridad ?? prioridadPorDefecto, // Usar el valor proporcionado o "NUEVO" por defecto
+        prioridad: data.prioridad ?? prioridadPorDefecto,
         estado: data.estado,
         gestionComercial: data.gestionComercial,
         CUIT: data.CUIT,
@@ -82,7 +80,6 @@ export const crearCliente = async (data: Omit<Cliente, 'id'>): Promise<Cliente> 
         emailComercial: data.emailComercial,
         rubro: data.rubro,
         categoria: data.categoria,
-        
       },
     });
   } catch (error: any) {
@@ -98,7 +95,7 @@ export const actualizarCliente = async (id: number, data: Partial<Omit<Cliente, 
       const clienteExistente = await prisma.cliente.findFirst({
         where: {
           telefono: data.telefono,
-          id: { not: id }, // Excluir el cliente actual
+          id: { not: id },
         },
       });
 
@@ -140,7 +137,6 @@ export const actualizarCliente = async (id: number, data: Partial<Omit<Cliente, 
         emailComercial: data.emailComercial,
         rubro: data.rubro,
         categoria: data.categoria,
-        
       },
     });
   } catch (error: any) {
@@ -173,5 +169,37 @@ export const eliminarCliente = async (id: number): Promise<void> => {
   } catch (error) {
     console.error('Error al eliminar cliente:', error);
     throw new Error('No se pudo eliminar el cliente');
+  }
+};
+
+export const actualizarPreciosPorTipoCliente = async (tipoCliente: string, nuevoPrecio: number): Promise<{ count: number }> => {
+  try {
+    // Verificar si el tipoCliente existe en la tabla categoria
+    const categoriaExistente = await prisma.categoria.findFirst({
+      where: {
+        campo: 'tipoCliente',
+        valor: tipoCliente,
+        deleteAt: null,
+      },
+    });
+
+    if (!categoriaExistente) {
+      throw new Error(`El tipo de cliente "${tipoCliente}" no existe`);
+    }
+
+    // Actualizar el precio para todos los clientes con el tipoCliente especificado
+    const updateResult = await prisma.cliente.updateMany({
+      where: {
+        tipoCliente,
+      },
+      data: {
+        precio: nuevoPrecio,
+      },
+    });
+
+    return { count: updateResult.count };
+  } catch (error: any) {
+    console.error('Error al actualizar precios por tipoCliente:', error);
+    throw new Error(error.message || 'No se pudo actualizar los precios');
   }
 };
